@@ -3,11 +3,12 @@ namespace App\Services;
 
 use App\Models\Todo;
 
-class TodoService Implements TodoServiceInterface {
+class TodoService implements TodoServiceInterface
+{
 
     public static function findByStatus($status)
     {
-        return Todo::query()->select('*')->where('status',  '=', $status)->orderBy('updated_at', 'desc')->get();
+        return Todo::query()->select('*')->where('status', '=', $status)->orderBy('updated_at', 'desc')->get();
     }
     public static function findDeleted()
     {

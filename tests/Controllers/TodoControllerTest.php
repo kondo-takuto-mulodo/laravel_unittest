@@ -6,7 +6,13 @@ class TodoControllerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        App::when('TodoController')->needs('TodoServiceInterface')->give('TodoServiceMock');
+
+        $this->app->bind(
+            'App\Services\TodoServiceInterface',
+            function () {
+                return new TodoServiceMock();
+            }
+        );
     }
     public function testGetByStatus()
     {
@@ -14,8 +20,3 @@ class TodoControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 }
-
-
-
-
-

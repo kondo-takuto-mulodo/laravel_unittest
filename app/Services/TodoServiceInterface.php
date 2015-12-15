@@ -1,7 +1,8 @@
 <?php
 namespace App\Services;
 
-interface TodoServiceInterface {
+interface TodoServiceInterface
+{
 
     const STATUS_INCOMPLETE = 1;
     const STATUS_COMPLETED = 2;

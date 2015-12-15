@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\TodoService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            'App\Services\TodoServiceInterface',
+            function () {
+                return new TodoService();
+            }
+        );
     }
 }

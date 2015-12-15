@@ -39,5 +39,4 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return User::where('name', '=', $name)->get();
     }
-
 }

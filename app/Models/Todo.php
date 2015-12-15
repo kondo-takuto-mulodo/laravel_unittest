@@ -11,5 +11,4 @@ class Todo extends Model
 
     protected $guraded = ['id'];
     protected $dates = ['completed_at', 'deleted_at'];
-
 }

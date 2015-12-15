@@ -15,7 +15,6 @@ class TodoController extends Controller
     public function __construct(TodoServiceInterface $todoservice)
     {
         $this->todoservice = $todoservice;
-        
     }
     public function getListByStatus()
     {
@@ -98,10 +97,10 @@ class TodoController extends Controller
     }
 }
 
-use App;
+//use App;
 
-if (App::environment('test')) {
-    App::bind('TodoServiceInterface', 'TodoServiceMock');
-} else {
-    App::bind('TodoServiceInterface', 'TodoService');
-}
+//if (App::environment('test')) {
+//    App::bind('TodoServiceInterface', 'TodoServiceMock');
+//} else {
+//    App::bind('TodoServiceInterface', 'TodoService');
+//}

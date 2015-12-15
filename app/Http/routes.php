@@ -11,9 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get(
+    '/',
+    function () {
+        return view('welcome');
+    }
+);
 
 Route::get('user', 'UserController@index');
 Route::get('todos/{status}', 'TodoController@getListByStatus');
