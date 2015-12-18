@@ -1,49 +1,40 @@
 <?php
+namespace Tests\Services;
 
-use Illuminate\Database\Seeder;
+use App\Models\Todo;
 use App\Services\TodoService;
-use Tests\Data\TodoServiceTestSeeder;
+use Tests\Mocks\TodoModelMock;
 
-class TodoServiceTest extends TestCase
+class TodoServiceTest extends \TestCase
 {
-    private $todo;
+    private $todoService;
 
     public function setUp()
     {
         parent::setUp();
-        $this->seed('TodoServiceTestSeeder');
+        $this->todoService = new TodoService(new TodoModelMock());
     }
 
-    public function testFindByStatus()
+    public function testGetByStatusAsCompleted()
     {
-        $actual = TodoService::findByStatus(TodoService::STATUS_INCOMPLETE);
-        $expected = TodoServiceTestSeeder::$incomplete;
-
-        $this->assertNotEmpty($actual);
-        $this->assertCount(count($expected), $actual);
-
-        $i = 0;
-
-        foreach ($actual as $item) {
-            $this->assertEquals($expected[$i]['title'], $item->title);
-            $this->assertEquals($expected[$i]['status'], $item->status);
-            $i += 1;
+        $todos = $this->todoService->getByStatus(TodoService::STATUS_COMPLETED);
+        foreach ($todos as $todo) {
+            $this->assertEquals('COMPLETED', $todo->status_name);
         }
     }
-    public function testFindDeleted()
+    public function testGetByStatusAsIncomplete()
     {
-        $actual = TodoService::findDeleted();
-        $expected = TodoServiceTestSeeder::$deleted;
+        $todos = $this->todoService->getByStatus(TodoService::STATUS_INCOMPLETE);
+        foreach ($todos as $todo) {
+            $this->assertEquals('INCOMPLETE', $todo->status_name);
+        }
+    }
 
-        $this->assertNotEmpty($actual);
-        $this->assertCount(count($expected), $actual);
-
-        $i = 0;
-
-        foreach ($actual as $item) {
-            $this->assertEquals($expected[$i]['title'], $item->title);
-            $this->assertEquals($expected[$i]['status'], $item->status);
-            $i += 1;
+    public function testGetDeleted()
+    {
+        $todos = $this->todoService->getDeleted();
+        foreach ($todos as $todo) {
+            $this->assertEquals('DELETED', $todo->status_name);
         }
     }
 }

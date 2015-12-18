@@ -1,7 +1,10 @@
 <?php
-use App\Http\Controllers\TodoController;
+namespace Tests\Controllers;
 
-class TodoControllerTest extends TestCase
+use App\Http\Controllers\TodoController;
+use Tests\Mocks\TodoServiceMock;
+
+class TodoControllerTest extends \TestCase
 {
     public function setUp()
     {

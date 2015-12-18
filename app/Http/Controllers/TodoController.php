@@ -18,7 +18,7 @@ class TodoController extends Controller
     }
     public function getListByStatus()
     {
-        $todos = $this->todoservice->findbyStatus(Input::get('status'));
+        $todos = $this->todoservice->getByStatus(Input::get('status'));
         //        return $todos->toJson();
     }
     /**
