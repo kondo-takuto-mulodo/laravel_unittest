@@ -1,70 +1,35 @@
 <?php
 namespace Tests\Models;
 
-use App\Services\TodoService;
 use App\Models\Todo;
+use Tests\Data\TodoData;
 
 class TodoModelTest extends \TestCase
 {
-    private $incomplete = [
-                           [
-                            'title' => 'Incomplete02',
-                            'status' => TodoService::STATUS_INCOMPLETE,
-                            'created_at' => '2015-07-02',
-                            'updated_at' => '2015-07-02',
-                            'deleted_at' => null,
-                            ],
-                           [
-                            'title' => 'Incomplete01',
-                            'status' => TodoService::STATUS_INCOMPLETE,
-                            'created_at' => '2015-07-01',
-                            'updated_at' => '2015-07-01',
-                            'deleted_at' => null,
-                            ],
-                           ];
-
-    private $completed = [
-                          [
-                           'title' => 'Completed02',
-                           'status' => TodoService::STATUS_COMPLETED,
-                           'created_at' => '2015-07-02',
-                           'updated_at' => '2015-07-02',
-                           'deleted_at' => null,
-                           ],
-                          [
-                           'title' => 'Completed01',
-                           'status' => TodoService::STATUS_COMPLETED,
-                           'created_at' => '2015-07-01',
-                           'updated_at' => '2015-07-01',
-                           'deleted_at' => null,
-                           ],
-                          ];
-
-    private $deleted = [
-                        [
-                         'title' => 'Deleted02',
-                         'status' => TodoService::STATUS_INCOMPLETE,
-                         'created_at' => '2015-06-30',
-                         'updated_at' => '2015-06-30',
-                         'deleted_at' => '2015-07-02'
-                         ],
-                        [
-                         'title' => 'Deleted01',
-                         'status' => TodoService::STATUS_INCOMPLETE,
-                         'created_at' => '2015-06-30',
-                         'updated_at' => '2015-06-30',
-                         'deleted_at' => '2015-07-01'
-                         ],
-                        ];
-
     private $todo;
+
+    private $incomplete;
+    private $completed;
+    private $deleted;
 
     public function setUp()
     {
         parent::setUp();
-        $this->todo = new Todo();
-    }
 
+        $this->todo = new Todo();
+        $todoData = new TodoData();
+
+        $this->incomplete = $todoData->getAsArray(TodoData::INCOMPLETE);
+        $this->completed = $todoData->getAsArray(TodoData::COMPLETED);
+        $this->deleted = $todoData->getAsArray(TodoData::DELETED);
+    }
+    public function tearDown()
+    {
+        unset($this->todo);
+        unset($this->incomplete);
+        unset($this->completed);
+        unset($this->deleted);
+    }
     public function testGetByStatus()
     {
 
@@ -78,7 +43,7 @@ class TodoModelTest extends \TestCase
             )
         );
 
-        $actual = $this->todo->getByStatus(TodoService::STATUS_INCOMPLETE);
+        $actual = $this->todo->getByStatus(\Config::get('app.status.todo.incomplete'));
 
         $this->assertNotEmpty($actual);
 

@@ -2,77 +2,34 @@
 namespace Tests\Mocks;
 
 use App\Models\TodoModelInterface;
-use App\Services\TodoService;
 use Tests\Mocks\AbstractMock;
+use Tests\Data\TodoData;
 
 class TodoModelMock extends AbstractMock implements TodoModelInterface
 {
-    private $incomplete = [
-                           [
-                            'title' => 'Incomplete02',
-                            'status' => TodoService::STATUS_INCOMPLETE,
-                            'created_at' => '2015-07-02',
-                            'updated_at' => '2015-07-02',
-                            'deleted_at' => null,
-                            ],
-                           [
-                            'title' => 'Incomplete01',
-                            'status' => TodoService::STATUS_INCOMPLETE,
-                            'created_at' => '2015-07-01',
-                            'updated_at' => '2015-07-01',
-                            'deleted_at' => null,
-                            ],
-                           ];
+    private $incomplete;
+    private $completed;
+    private $deleted;
 
-    private $completed = [
-                          [
-                           'title' => 'Completed02',
-                           'status' => TodoService::STATUS_COMPLETED,
-                           'created_at' => '2015-07-02',
-                           'updated_at' => '2015-07-02',
-                           'deleted_at' => null,
-                           ],
-                          [
-                           'title' => 'Completed01',
-                           'status' => TodoService::STATUS_COMPLETED,
-                           'created_at' => '2015-07-01',
-                           'updated_at' => '2015-07-01',
-                           'deleted_at' => null,
-                           ],
-                          ];
+    public function __construct()
+    {
+        $todoData = new TodoData();
 
-    private $deleted = [
-                        [
-                         'title' => 'Deleted02',
-                         'status' => TodoService::STATUS_INCOMPLETE,
-                         'created_at' => '2015-06-30',
-                         'updated_at' => '2015-06-30',
-                         'deleted_at' => '2015-07-02'
-                         ],
-                        [
-                         'title' => 'Deleted01',
-                         'status' => TodoService::STATUS_INCOMPLETE,
-                         'created_at' => '2015-06-30',
-                         'updated_at' => '2015-06-30',
-                         'deleted_at' => '2015-07-01'
-                         ],
-                        ];
+        $this->incomplete = $todoData->getAsObject(TodoData::INCOMPLETE);
+        $this->completed = $todoData->getAsObject(TodoData::COMPLETED);
+        $this->deleted = $todoData->getAsObject(TodoData::DELETED);
+    }
 
     public function getByStatus($status)
     {
-        $todos = array();
-        if ($status == TodoService::STATUS_INCOMPLETE) {
-            $todos = $this->incomplete;
-        } elseif ($status == TodoService::STATUS_COMPLETED) {
-            $todos = $this->completed;
+        if ($status == \Config::get('app.status.todo.incomplete')) {
+            return $this->incomplete;
+        } elseif ($status == \Config::get('app.status.todo.completed')) {
+            return $this->completed;
         }
-        $this->arrayToObject($todos);
-        return (array)$todos;
     }
     public function getDeleted()
     {
-        $todos = $this->deleted;
-        $this->arrayToObject($todos);
-        return (array)$todos;
+        return $this->deleted;
     }
 }

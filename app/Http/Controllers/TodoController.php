@@ -19,7 +19,6 @@ class TodoController extends Controller
     public function getListByStatus()
     {
         $todos = $this->todoservice->getByStatus(Input::get('status'));
-        //        return $todos->toJson();
     }
     /**
      * Display a listing of the resource.
@@ -96,11 +95,3 @@ class TodoController extends Controller
         //
     }
 }
-
-//use App;
-
-//if (App::environment('test')) {
-//    App::bind('TodoServiceInterface', 'TodoServiceMock');
-//} else {
-//    App::bind('TodoServiceInterface', 'TodoService');
-//}

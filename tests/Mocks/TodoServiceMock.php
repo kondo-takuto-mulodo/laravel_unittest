@@ -3,81 +3,43 @@ namespace Tests\Mocks;
 
 use App\Services\TodoServiceInterface;
 use Tests\Mocks\AbstractMock;
+use Tests\Data\TodoData;
 
 class TodoServiceMock extends AbstractMock implements TodoServiceInterface
 {
-    private $incomplete = [
-                           [
-                            'title' => 'Incomplete02',
-                            'status' => self::STATUS_INCOMPLETE,
-                            'created_at' => '2015-07-02',
-                            'updated_at' => '2015-07-02',
-                            'deleted_at' => null,
-                            'status_name' => 'INCOMPLETE',
-                        ],
-                           [
-                            'title' => 'Incomplete01',
-                            'status' => self::STATUS_INCOMPLETE,
-                            'created_at' => '2015-07-01',
-                            'updated_at' => '2015-07-01',
-                            'deleted_at' => null,
-                            'status_name' => 'INCOMPLETE',
-                            ],
-                           ];
 
-    private $completed = [
-                          [
-                           'title' => 'Completed02',
-                           'status' => self::STATUS_COMPLETED,
-                           'created_at' => '2015-07-02',
-                           'updated_at' => '2015-07-02',
-                           'deleted_at' => null,
-                           'status_name' => 'COMPLETED',
-                           ],
-                          [
-                           'title' => 'Completed01',
-                           'status' => self::STATUS_COMPLETED,
-                           'created_at' => '2015-07-01',
-                           'updated_at' => '2015-07-01',
-                           'deleted_at' => null,
-                           'status_name' => 'COMPLETED',
-                           ],
-                          ];
+    public function __construct()
+    {
+        $todoData = new TodoData();
 
-    private $deleted = [
-                        [
-                         'title' => 'Deleted02',
-                         'status' => self::STATUS_INCOMPLETE,
-                         'created_at' => '2015-06-30',
-                         'updated_at' => '2015-06-30',
-                         'deleted_at' => '2015-07-02',
-                         'status_name' => 'DELETED',
-                         ],
-                        [
-                         'title' => 'Deleted01',
-                         'status' => self::STATUS_INCOMPLETE,
-                         'created_at' => '2015-06-30',
-                         'updated_at' => '2015-06-30',
-                         'deleted_at' => '2015-07-01',
-                         'status_name' => 'DELETED',
-                         ],
-                        ];
+        $this->incomplete = $todoData->getAsObject(TodoData::INCOMPLETE);
 
+        foreach ($this->incomplete as &$record) {
+            $record->status_name = 'INCOMPLETE';
+        }
+
+        $this->completed = $todoData->getAsObject(TodoData::COMPLETED);
+
+        foreach ($this->completed as &$record) {
+            $record->status_name = 'COMPLETED';
+        }
+
+        $this->deleted = $todoData->getAsObject(TodoData::DELETED);
+
+        foreach ($this->deleted as &$record) {
+            $record->status_name = 'DELETED';
+        }
+    }
     public function getByStatus($status)
     {
-        $todos = array();
-        if ($status == self::STATUS_INCOMPLETE) {
-            $todos = $this->incomplete;
-        } elseif ($status == self::STATUS_COMPLETED) {
-            $todos = $this->completed;
+        if ($status == \Config::get('status.todo.incomplete')) {
+            return $this->incomplete;
+        } elseif ($status == \Config::get('status.todo.completed')) {
+            return $this->completed;
         }
-        $this->arrayToObject($todos);
-        return (array)$todos;
     }
     public function getDeleted()
     {
-        $todos = $this->deleted;
-        $this->arrayToObject($todos);
-        return (array)$todos;
+        return $this->deleted;
     }
 }

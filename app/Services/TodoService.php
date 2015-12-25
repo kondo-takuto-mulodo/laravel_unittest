@@ -16,10 +16,11 @@ class TodoService implements TodoServiceInterface
     public function getByStatus($status)
     {
         $todos = $this->todo->getByStatus($status);
+
         foreach ($todos as $todo) {
-            if ($todo->status == self::STATUS_INCOMPLETE) {
+            if ($todo->status == \Config::get('app.status.todo.incomplete')) {
                 $todo->status_name = 'INCOMPLETE';
-            } elseif ($todo->status == self::STATUS_COMPLETED) {
+            } elseif ($todo->status == \Config::get('app.status.todo.completed')) {
                 $todo->status_name = 'COMPLETED';
             }
         }
