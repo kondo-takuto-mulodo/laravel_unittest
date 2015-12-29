@@ -1,49 +1,69 @@
 <?php
+namespace Tests\Services;
 
-use Illuminate\Database\Seeder;
+use App\Models\Todo;
 use App\Services\TodoService;
-use Tests\Data\TodoServiceTestSeeder;
+use Tests\Mocks\TodoModelMock;
 
-class TodoServiceTest extends TestCase
+class TodoServiceTest extends \TestCase
 {
-    private $todo;
+    private $todoService;
 
     public function setUp()
     {
         parent::setUp();
-        $this->seed('TodoServiceTestSeeder');
+        $this->todoService = new TodoService(new TodoModelMock());
     }
-
-    public function testFindByStatus()
+    public function tearDown()
     {
-        $actual = TodoService::findByStatus(TodoService::STATUS_INCOMPLETE);
-        $expected = TodoServiceTestSeeder::$incomplete;
+        unset($this->todoService);
+    }
+    public function testGetAll()
+    {
+        $statusIncomplete = \Config::get('app.status.todo.incomplete');
+        $statusCompleted = \Config::get('app.status.todo.completed');
+
+        $actual = $this->todoService->getAll();
 
         $this->assertNotEmpty($actual);
-        $this->assertCount(count($expected), $actual);
-
-        $i = 0;
 
         foreach ($actual as $item) {
-            $this->assertEquals($expected[$i]['title'], $item->title);
-            $this->assertEquals($expected[$i]['status'], $item->status);
-            $i += 1;
+            if ($item->status == $statusIncomplete) {
+                $this->assertEquals('INCOMPLETE', $item->status_name);
+            } elseif ($item->status == $statusCompleted) {
+                $this->assertEquals('COMPLETED', $item->status_name);
+            }
         }
     }
-    public function testFindDeleted()
+    public function testGetByStatusWhenCompleted()
     {
-        $actual = TodoService::findDeleted();
-        $expected = TodoServiceTestSeeder::$deleted;
+        $actual = $this->todoService->getByStatus(\Config::get('app.status.todo.completed'));
 
         $this->assertNotEmpty($actual);
-        $this->assertCount(count($expected), $actual);
-
-        $i = 0;
 
         foreach ($actual as $item) {
-            $this->assertEquals($expected[$i]['title'], $item->title);
-            $this->assertEquals($expected[$i]['status'], $item->status);
-            $i += 1;
+            $this->assertEquals('COMPLETED', $item->status_name);
+        }
+    }
+    public function testGetByStatusWhenIncomplete()
+    {
+        $actual = $this->todoService->getByStatus(\Config::get('app.status.todo.incomplete'));
+
+        $this->assertNotEmpty($actual);
+
+        foreach ($actual as $item) {
+            $this->assertEquals('INCOMPLETE', $item->status_name);
+        }
+    }
+
+    public function testGetDeleted()
+    {
+        $actual = $this->todoService->getDeleted();
+
+        $this->assertNotEmpty($actual);
+
+        foreach ($actual as $item) {
+            $this->assertEquals('DELETED', $item->status_name);
         }
     }
 }

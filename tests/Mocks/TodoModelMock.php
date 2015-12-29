@@ -1,34 +1,23 @@
 <?php
 namespace Tests\Mocks;
 
-use App\Services\TodoServiceInterface;
+use App\Models\TodoModelInterface;
 use Tests\Mocks\AbstractMock;
 use Tests\Data\TodoData;
 
-class TodoServiceMock extends AbstractMock implements TodoServiceInterface
+class TodoModelMock extends AbstractMock implements TodoModelInterface
 {
+    private $incomplete;
+    private $completed;
+    private $deleted;
 
     public function __construct()
     {
         $todoData = new TodoData();
 
         $this->incomplete = $todoData->getAsObject(TodoData::INCOMPLETE);
-
-        foreach ($this->incomplete as &$record) {
-            $record->status_name = 'INCOMPLETE';
-        }
-
         $this->completed = $todoData->getAsObject(TodoData::COMPLETED);
-
-        foreach ($this->completed as &$record) {
-            $record->status_name = 'COMPLETED';
-        }
-
         $this->deleted = $todoData->getAsObject(TodoData::DELETED);
-
-        foreach ($this->deleted as &$record) {
-            $record->status_name = 'DELETED';
-        }
     }
     public function getAll()
     {

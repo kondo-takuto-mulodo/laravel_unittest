@@ -19,4 +19,5 @@ Route::get(
 );
 
 Route::get('user', 'UserController@index');
-Route::get('todos/{status}', 'TodoController@getListByStatus');
+Route::get('todos', 'TodoController@index');
+Route::get('todos/status/{status}', 'TodoController@search');

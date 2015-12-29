@@ -1,7 +1,7 @@
 <?php
-namespace App\Services;
+namespace App\Models;
 
-interface TodoServiceInterface
+interface TodoModelInterface
 {
     public function getAll();
     public function getByStatus($status);

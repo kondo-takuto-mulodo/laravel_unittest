@@ -16,18 +16,28 @@ class TodoController extends Controller
     {
         $this->todoservice = $todoservice;
     }
-    public function getListByStatus()
+    public function search($status)
     {
-        $todos = $this->todoservice->findbyStatus(Input::get('status'));
-        //        return $todos->toJson();
+        $todos = null;
+
+        if ($status == \Config::get('app.status.todo.incomplete') ||
+            $status == \Config::get('app.status.todo.completed')) {
+            $todos = $this->todoservice->getByStatus($status);
+        } else {
+            $todos = $this->todoservice->getDeleted($status);
+        }
+
+        return view('todos.index')->with('todos', $todos);
     }
     /**
      * Display a listing of the resource.
      *
      * @return Response
      */
-    public function index(TodoServiceInterface $todo)
+    public function index()
     {
+        $todos = $this->todoservice->getAll();
+        return view('todos.index')->with('todos', $todos);
     }
 
     /**
@@ -96,11 +106,3 @@ class TodoController extends Controller
         //
     }
 }
-
-//use App;
-
-//if (App::environment('test')) {
-//    App::bind('TodoServiceInterface', 'TodoServiceMock');
-//} else {
-//    App::bind('TodoServiceInterface', 'TodoService');
-//}
