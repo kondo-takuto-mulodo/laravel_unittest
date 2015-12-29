@@ -2,10 +2,9 @@
 namespace Tests\Mocks;
 
 use App\Models\TodoModelInterface;
-use Tests\Mocks\AbstractMock;
 use Tests\Data\TodoData;
 
-class TodoModelMock extends AbstractMock implements TodoModelInterface
+class TodoModelMock implements TodoModelInterface
 {
     private $incomplete;
     private $completed;

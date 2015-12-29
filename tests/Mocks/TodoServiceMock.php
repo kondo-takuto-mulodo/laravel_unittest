@@ -2,10 +2,9 @@
 namespace Tests\Mocks;
 
 use App\Services\TodoServiceInterface;
-use Tests\Mocks\AbstractMock;
 use Tests\Data\TodoData;
 
-class TodoServiceMock extends AbstractMock implements TodoServiceInterface
+class TodoServiceMock implements TodoServiceInterface
 {
 
     public function __construct()
