@@ -18,6 +18,23 @@ class TodoServiceTest extends \TestCase
     {
         unset($this->todoService);
     }
+    public function testGetAll()
+    {
+        $statusIncomplete = \Config::get('app.status.todo.incomplete');
+        $statusCompleted = \Config::get('app.status.todo.completed');
+
+        $actual = $this->todoService->getAll();
+
+        $this->assertNotEmpty($actual);
+
+        foreach ($actual as $item) {
+            if ($item->status == $statusIncomplete) {
+                $this->assertEquals('INCOMPLETE', $item->status_name);
+            } elseif ($item->status == $statusCompleted) {
+                $this->assertEquals('COMPLETED', $item->status_name);
+            }
+        }
+    }
     public function testGetByStatusWhenCompleted()
     {
         $actual = $this->todoService->getByStatus(\Config::get('app.status.todo.completed'));

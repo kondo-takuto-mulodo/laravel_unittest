@@ -30,11 +30,15 @@ class TodoServiceMock extends AbstractMock implements TodoServiceInterface
             $record->status_name = 'DELETED';
         }
     }
+    public function getAll()
+    {
+        return array_merge($this->incomplete, $this->completed);
+    }
     public function getByStatus($status)
     {
-        if ($status == \Config::get('status.todo.incomplete')) {
+        if ($status == \Config::get('app.status.todo.incomplete')) {
             return $this->incomplete;
-        } elseif ($status == \Config::get('status.todo.completed')) {
+        } elseif ($status == \Config::get('app.status.todo.completed')) {
             return $this->completed;
         }
     }

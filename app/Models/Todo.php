@@ -13,6 +13,10 @@ class Todo extends Model implements TodoModelInterface
     protected $guraded = ['id'];
     protected $dates = ['completed_at', 'deleted_at'];
 
+    public function getAll()
+    {
+        return Todo::query()->select('*')->get();
+    }
     public function getByStatus($status)
     {
         return Todo::query()->select('*')->where('status', '=', $status)->orderBy('updated_at', 'desc')->get();

@@ -17,9 +17,24 @@ class TodoControllerTest extends \TestCase
             }
         );
     }
-    public function testGetByStatus()
+    public function testIndex()
     {
-        $response = $this->call('GET', '/todos/1');
+        $response = $this->call('GET', '/todos');
         $this->assertEquals(200, $response->getStatusCode());
+    }
+    public function testSearchByIncomplete()
+    {
+        $response = $this->call('GET', '/todos/status/' . \Config::get('app.status.todo.incomplete'));
+        $this->assertResponseOk();
+    }
+    public function testSearchByCompleted()
+    {
+        $response = $this->call('GET', '/todos/status/' . \Config::get('app.status.todo.completed'));
+        $this->assertResponseOk();
+    }
+    public function testSearchByDeleted()
+    {
+        $response = $this->call('GET', '/todos/status/3');
+        $this->assertResponseOk();
     }
 }

@@ -30,6 +30,24 @@ class TodoModelTest extends \TestCase
         unset($this->completed);
         unset($this->deleted);
     }
+    public function testGetAll()
+    {
+        $this->truncate('todos');
+
+        \DB::table('todos')->insert(
+            array_merge(
+                $this->incomplete,
+                $this->completed,
+                $this->deleted
+            )
+        );
+
+        $actual = $this->todo->getAll();
+        $expected = array_merge($this->incomplete, $this->completed);
+
+        $this->assertNotEmpty($actual);
+        $this->assertEquals(count($expected), count($actual));
+    }
     public function testGetByStatus()
     {
 

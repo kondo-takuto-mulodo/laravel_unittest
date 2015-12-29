@@ -19,7 +19,10 @@ class TodoModelMock extends AbstractMock implements TodoModelInterface
         $this->completed = $todoData->getAsObject(TodoData::COMPLETED);
         $this->deleted = $todoData->getAsObject(TodoData::DELETED);
     }
-
+    public function getAll()
+    {
+        return array_merge($this->incomplete, $this->completed);
+    }
     public function getByStatus($status)
     {
         if ($status == \Config::get('app.status.todo.incomplete')) {

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Services\TodoService;
+use App\Models\Todo;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             'App\Services\TodoServiceInterface',
             function () {
-                return new TodoService();
+                return new TodoService(new Todo());
             }
         );
     }
