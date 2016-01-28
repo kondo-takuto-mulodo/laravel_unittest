@@ -193,5 +193,10 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
     ],
-
+    'status' => [
+                 'todo' => [
+                            'incomplete' => 1,
+                            'completed' => 2,
+                            ],
+                 ],
 ];
