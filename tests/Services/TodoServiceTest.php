@@ -3,28 +3,46 @@ namespace Tests\Services;
 
 use App\Models\Todo;
 use App\Services\TodoService;
-use Tests\Mocks\TodoModelMock;
+use Tests\Data\TodoData;
+use \Mockery as Mock;
 
 class TodoServiceTest extends \TestCase
 {
-    private $todoService;
+    private $todo;
+    private $dataSet;
 
     public function setUp()
     {
         parent::setUp();
-        $this->todoService = new TodoService(new TodoModelMock());
+
+        $this->todo = Mock::mock('App\Models\TodoModelInterface');
+        $this->dataSet = new TodoData();
     }
     public function tearDown()
     {
-        unset($this->todoService);
+        unset($this->dataSet);
+        Mock::close();
     }
     public function testGetAll()
     {
         $statusIncomplete = \Config::get('app.status.todo.incomplete');
         $statusCompleted = \Config::get('app.status.todo.completed');
 
-        $actual = $this->todoService->getAll();
+        $incomplete = $this->dataSet->getAsObject(TodoData::INCOMPLETE);
+        $completed = $this->dataSet->getAsObject(TodoData::COMPLETED);
 
+        // create Mock for model
+        $this->todo
+            ->shouldReceive('getAll') // define target method name
+            ->andReturn(array_merge($incomplete, $completed)); // inject expected data
+
+        // inject Mock to test target class
+        $todoService = new TodoService($this->todo);
+
+        // run target method
+        $actual = $todoService->getAll();
+
+        // assertion
         $this->assertNotEmpty($actual);
 
         foreach ($actual as $item) {
@@ -37,8 +55,22 @@ class TodoServiceTest extends \TestCase
     }
     public function testGetByStatusWhenCompleted()
     {
-        $actual = $this->todoService->getByStatus(\Config::get('app.status.todo.completed'));
 
+        $status = \Config::get('app.status.todo.completed');
+
+        // create Mock for model
+        $this->todo
+            ->shouldReceive('getByStatus') // define target method name
+            ->with($status) // put parameter
+            ->andReturn($this->dataSet->getAsObject(TodoData::COMPLETED)); // inject expacted data
+
+        // inject Mock to test target class
+        $todoService = new TodoService($this->todo);
+
+        // run target method
+        $actual = $todoService->getByStatus($status);
+
+        // assertion
         $this->assertNotEmpty($actual);
 
         foreach ($actual as $item) {
@@ -47,7 +79,19 @@ class TodoServiceTest extends \TestCase
     }
     public function testGetByStatusWhenIncomplete()
     {
-        $actual = $this->todoService->getByStatus(\Config::get('app.status.todo.incomplete'));
+        $status = \Config::get('app.status.todo.incomplete');
+
+        // create Mock for model
+        $this->todo
+            ->shouldReceive('getByStatus') // define target method name
+            ->with($status) // put parameter
+            ->andReturn($this->dataSet->getAsObject(TodoData::INCOMPLETE)); // inject expacted data
+
+        // inject Mock to test target class
+        $todoService = new TodoService($this->todo);
+
+        // run target method
+        $actual = $todoService->getByStatus($status);
 
         $this->assertNotEmpty($actual);
 
@@ -56,9 +100,17 @@ class TodoServiceTest extends \TestCase
         }
     }
 
-    public function testGetDeleted()
+    public function testGetByStatusWhenDeleted()
     {
-        $actual = $this->todoService->getDeleted();
+        // create Mock for model
+        $this->todo
+            ->shouldReceive('getDeleted') // define target method name
+            ->andReturn($this->dataSet->getAsObject(TodoData::DELETED)); // inject expacted data
+
+        // inject Mock to test target class
+        $todoService = new TodoService($this->todo);
+
+        $actual = $todoService->getByStatus(3);
 
         $this->assertNotEmpty($actual);
 

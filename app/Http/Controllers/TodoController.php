@@ -18,14 +18,7 @@ class TodoController extends Controller
     }
     public function search($status)
     {
-        $todos = null;
-
-        if ($status == \Config::get('app.status.todo.incomplete') ||
-            $status == \Config::get('app.status.todo.completed')) {
-            $todos = $this->todoservice->getByStatus($status);
-        } else {
-            $todos = $this->todoservice->getDeleted($status);
-        }
+        $todos = $this->todoservice->getByStatus($status);
 
         return view('todos.index')->with('todos', $todos);
     }
