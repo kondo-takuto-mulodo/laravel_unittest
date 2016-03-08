@@ -46,9 +46,9 @@
         "post-create-project-cmd": [
             "php artisan key:generate"
         ],
-				"test": [
-					"php vendor/phpunit/phpunit/phpunit"
-				]
+	"test": [
+	    "php vendor/phpunit/phpunit/phpunit"
+	]
     },
     "config": {
         "preferred-install": "dist"
