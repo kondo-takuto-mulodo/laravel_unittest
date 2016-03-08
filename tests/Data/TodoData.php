@@ -2,7 +2,6 @@
 namespace Tests\Data;
 
 use Tests\Data\AbstractData;
-use App\Services\TodoService;
 
 class TodoData extends AbstractData
 {
