@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Controllers;
 
-use App\Http\Controllers\TodoController;
 use Tests\Data\TodoData;
 use \Mockery as Mock;
 
